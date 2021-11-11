@@ -3,8 +3,6 @@ const MAX_Page = 10;
 const MAX_ShortcutPerPage = 12;
 const MAX_ShortcutPerPage2 = 24;
 const MAX_ShortcutPerPage3 = 36;
-const MAX_ShortcutPerPage4 = 48;
-const MAX_ShortcutPerPage5 = 60;
 enum EJoyShortcut
 {
 	JOYSHORTCUT_Left,
@@ -23,11 +21,7 @@ var bool m_IsJoypadOn;
 var bool m_IsExpand1;
 var bool m_IsExpand2;
 var int CurrentShortcutPage4;
-var int CurrentShortcutPage5;
-var int CurrentShortcutPage6;
 var bool m_IsExpand3;
-var bool m_IsExpand4;
-var bool m_IsExpand5;
 var bool m_IsShortcutExpand;
 var String m_ShortcutWndName;
 function OnRegisterEvent()
@@ -70,8 +64,6 @@ function OnLoad()
 	m_IsExpand2 = GetOptionBool("Game", "Is2ExpandShortcutWnd");
 	m_IsVertical = GetOptionBool("Game", "IsShortcutWndVertical");
 	m_IsExpand3 = GetOptionBool("Game", "Is3ExpandShortcutWnd");
-	m_IsExpand4 = GetOptionBool("Game", "Is4ExpandShortcutWnd");
-	m_IsExpand5 = GetOptionBool("Game", "Is5ExpandShortcutWnd");
 	InitShortPageNum();
 	bMinTooltip = GetOptionBool("Game", "IsShortcutWndMinTooltip");
 	Script = Tooltip(GetScript("Tooltip"));
@@ -98,8 +90,6 @@ function OnDefaultPosition()
 		m_IsExpand1 = true;
 		m_IsExpand2 = true;
 		m_IsExpand3 = true;
-		m_IsExpand4 = true;
-		m_IsExpand5 = true;
 	}
 	else
 	{
@@ -219,8 +209,6 @@ function InitShortPageNum()
 	CurrentShortcutPage2 = 1;
 	CurrentShortcutPage3 = 2;
 	CurrentShortcutPage4 = 3;
-	CurrentShortcutPage5 = 4;
-	CurrentShortcutPage6 = 5;
 }
 function HandleShortcutPageUpdate(string param)
 {
@@ -263,14 +251,6 @@ function HandleShortcutUpdate(string param)
 	{
 		class'UIAPI_SHORTCUTITEMWINDOW'.static.UpdateShortcut("ShortcutWnd." $ m_ShortcutWndName $ "_3.Shortcut" $ nShortcutNum, nShortcutID);
 	}
-	if(IsShortcutIDInCurPage(CurrentShortcutPage5,nShortcutID))
-	{
-		class'UIAPI_SHORTCUTITEMWINDOW'.static.UpdateShortcut("ShortcutWnd." $ m_ShortcutWndName $ "_4.Shortcut" $ nShortcutNum, nShortcutID);
-	}
-	if(IsShortcutIDInCurPage(CurrentShortcutPage6,nShortcutID))
-	{
-		class'UIAPI_SHORTCUTITEMWINDOW'.static.UpdateShortcut("ShortcutWnd." $ m_ShortcutWndName $ "_5.Shortcut" $ nShortcutNum, nShortcutID);
-	}
 }
 function HandleShortcutClear()
 {
@@ -280,13 +260,9 @@ function HandleShortcutClear()
 		class'UIAPI_SHORTCUTITEMWINDOW'.static.Clear("ShortcutWnd.ShortcutWndVertical.Shortcut" $ (i+1));
 		class'UIAPI_SHORTCUTITEMWINDOW'.static.Clear("ShortcutWnd.ShortcutWndVertical_1.Shortcut" $ (i+1));
 		class'UIAPI_SHORTCUTITEMWINDOW'.static.Clear("ShortcutWnd.ShortcutWndVertical_2.Shortcut" $ (i+1));
-		class'UIAPI_SHORTCUTITEMWINDOW'.static.Clear("ShortcutWnd.ShortcutWndVertical_3.Shortcut" $ (i+1));
-		class'UIAPI_SHORTCUTITEMWINDOW'.static.Clear("ShortcutWnd.ShortcutWndVertical_4.Shortcut" $ (i+1));
 		class'UIAPI_SHORTCUTITEMWINDOW'.static.Clear("ShortcutWnd.ShortcutWndHorizontal.Shortcut" $ (i+1));
 		class'UIAPI_SHORTCUTITEMWINDOW'.static.Clear("ShortcutWnd.ShortcutWndHorizontal_1.Shortcut" $ (i+1));
 		class'UIAPI_SHORTCUTITEMWINDOW'.static.Clear("ShortcutWnd.ShortcutWndHorizontal_2.Shortcut" $ (i+1));
-		class'UIAPI_SHORTCUTITEMWINDOW'.static.Clear("ShortcutWnd.ShortcutWndHorizontal_3.Shortcut" $ (i+1));
-		class'UIAPI_SHORTCUTITEMWINDOW'.static.Clear("ShortcutWnd.ShortcutWndHorizontal_4.Shortcut" $ (i+1));
 		class'UIAPI_SHORTCUTITEMWINDOW'.static.Clear("ShortcutWnd.ShortcutWndJoypadExpand.Shortcut" $ (i+1));
 	}
 	for(i=0; i< 4 ; ++i)
@@ -422,18 +398,6 @@ function OnClickButton(string a_strID)
 	case "NextBtn4":
 		OnNextBtn4();
 		break;
-	case "PrevBtn5":
-		OnPrevBtn5();
-		break;
-	case "NextBtn5":
-		OnNextBtn5();
-		break;
-	case "PrevBtn6":
-		OnPrevBtn5();
-		break;
-	case "NextBtn6":
-		OnNextBtn5();
-		break;
 	case "TooltipMinBtn":
 		OnMinBtn();
 		break;
@@ -534,38 +498,6 @@ function OnNextBtn4()
 		nNewPage = 0;
 	SetCurPage4(nNewPage);
 }
-function OnPrevBtn5()
-{
-	local int nNewPage;
-	nNewPage = CurrentShortcutPage5 - 1;
-	if(0 > nNewPage)
-		nNewPage = MAX_Page - 1;
-	SetCurPage5(nNewPage);
-}
-function OnNextBtn5()
-{
-	local int nNewPage;
-	nNewPage = CurrentShortcutPage5 + 1;
-	if(MAX_Page <= nNewPage)
-		nNewPage = 0;
-	SetCurPage5(nNewPage);
-}
-function OnPrevBtn6()
-{
-	local int nNewPage;
-	nNewPage = CurrentShortcutPage6 - 1;
-	if(0 > nNewPage)
-		nNewPage = MAX_Page - 1;
-	SetCurPage6(nNewPage);
-}
-function OnNextBtn6()
-{
-	local int nNewPage;
-	nNewPage = CurrentShortcutPage6 + 1;
-	if(MAX_Page <= nNewPage)
-		nNewPage = 0;
-	SetCurPage6(nNewPage);
-}
 function OnClickLockBtn()
 {
 	UnLock();
@@ -588,21 +520,6 @@ function OnRotateBtn()
 		class'UIAPI_WINDOW'.static.SetAnchor("ShortcutWnd.ShortcutWndHorizontal", "ShortcutWnd.ShortcutWndVertical", "BottomRight", "BottomRight", 0, 0);
 		class'UIAPI_WINDOW'.static.ClearAnchor("ShortcutWnd.ShortcutWndHorizontal");
 		class'UIAPI_WINDOW'.static.SetAnchor("ShortcutWnd.ShortcutWndVertical", "ShortcutWnd.ShortcutWndHorizontal", "BottomRight", "BottomRight", 0, 0);
-	}
-	if(m_IsExpand5 == true)
-	{
-		Expand1();
-		Expand2();
-		Expand3();
-		Expand4();
-		Expand5();
-	}
-	if(m_IsExpand4 == true)
-	{
-		Expand1();
-		Expand2();
-		Expand3();
-		Expand4();
 	}
 	if(m_IsExpand3 == true)
 	{
@@ -680,36 +597,6 @@ function SetCurPage4(int a_nCurPage)
 	{
 		debug("ShortcutWnd." $ m_ShortcutWndName $ "." $ m_ShortcutWndName $ "_1." $ m_ShortcutWndName $"_3" $ ".Shortcut" $ (i + 1) @ nShortcutID);
 		class'UIAPI_SHORTCUTITEMWINDOW'.static.UpdateShortcut("ShortcutWnd." $ m_ShortcutWndName $ "." $ m_ShortcutWndName $ "_1." $ m_ShortcutWndName $"_3" $ ".Shortcut" $ (i + 1), nShortcutID);
-		nShortcutID++;
-	}
-}
-function SetCurPage5(int a_nCurPage)
-{
-	local int i;
-	local int nShortcutID;
-	if(0 > a_nCurPage || MAX_Page <= a_nCurPage)
-		return;
-	CurrentShortcutPage5 = a_nCurPage;
-	class'UIAPI_TEXTBOX'.static.SetText("ShortcutWnd." $ m_ShortcutWndName $ "." $ m_ShortcutWndName $ "_1." $ m_ShortcutWndName $"_4" $ ".PageNumTextBox", string(CurrentShortcutPage5 + 1));
-	nShortcutID = CurrentShortcutPage5 * MAX_ShortcutPerPage;
-	for(i = 0; i < MAX_ShortcutPerPage; ++i)
-	{
-		class'UIAPI_SHORTCUTITEMWINDOW'.static.UpdateShortcut("ShortcutWnd." $ m_ShortcutWndName $ "." $ m_ShortcutWndName $ "_1." $ m_ShortcutWndName $"_4" $ ".Shortcut" $ (i + 1), nShortcutID);
-		nShortcutID++;
-	}
-}
-function SetCurPage6(int a_nCurPage)
-{
-	local int i;
-	local int nShortcutID;
-	if(0 > a_nCurPage || MAX_Page <= a_nCurPage)
-		return;
-	CurrentShortcutPage6 = a_nCurPage;
-	class'UIAPI_TEXTBOX'.static.SetText("ShortcutWnd." $ m_ShortcutWndName $ "." $ m_ShortcutWndName $ "_1." $ m_ShortcutWndName $"_5" $ ".PageNumTextBox", string(CurrentShortcutPage6 + 1));
-	nShortcutID = CurrentShortcutPage6 * MAX_ShortcutPerPage;
-	for(i = 0; i < MAX_ShortcutPerPage; ++i)
-	{
-		class'UIAPI_SHORTCUTITEMWINDOW'.static.UpdateShortcut("ShortcutWnd." $ m_ShortcutWndName $ "." $ m_ShortcutWndName $ "_1." $ m_ShortcutWndName $"_5" $ ".Shortcut" $ (i + 1), nShortcutID);
 		nShortcutID++;
 	}
 }
@@ -818,8 +705,6 @@ function ArrangeWnd()
 	SetCurPage2(CurrentShortcutPage2);
 	SetCurPage3(CurrentShortcutPage3);
 	SetCurPage4(CurrentShortcutPage4);
-	SetCurPage5(CurrentShortcutPage5);
-	SetCurPage6(CurrentShortcutPage6);
 	if(m_IsExpand1 == true)
 	{
 		m_IsShortcutExpand = true;
@@ -835,16 +720,6 @@ function ArrangeWnd()
 		m_IsShortcutExpand = false;
 		HandleExpandButton();
 	}
-	else if(m_IsExpand4 == true)
-	{
-		m_IsShortcutExpand = false;
-		HandleExpandButton();
-	}
-	else if(m_IsExpand5 == true)
-	{
-		m_IsShortcutExpand = false;
-		HandleExpandButton();
-	}
 	else
 	{
 		m_IsShortcutExpand = true;
@@ -853,18 +728,8 @@ function ArrangeWnd()
 }
 function ExpandWnd()
 {
-	if(m_IsExpand1 == true || m_IsExpand2 == true || m_IsExpand3 == true || m_IsExpand4 == true || m_IsExpand5 == true)
+	if(m_IsExpand1 == true || m_IsExpand2 == true || m_IsExpand3 == true)
 	{
-		if(m_IsExpand5 == true)
-		{
-			m_IsShortcutExpand = false;
-			Expand5();
-		}
-		if(m_IsExpand4 == true)
-		{
-			m_IsShortcutExpand = false;
-			Expand4();
-		}
 		if(m_IsExpand3 == true)
 		{
 			m_IsShortcutExpand = false;
@@ -913,23 +778,6 @@ function Expand3()
 	class'UIAPI_WINDOW'.static.ShowWindow("ShortcutWnd.ShortcutWndVertical_3");
 	class'UIAPI_WINDOW'.static.ShowWindow("ShortcutWnd.ShortcutWndHorizontal_3");
 	HandleExpandButton();
-function Expand4()
-{
-	m_IsShortcutExpand = true;
-	m_IsExpand4 = true;
-	SetOptionBool("Game", "Is4ExpandShortcutWnd", m_IsExpand4);
-	class'UIAPI_WINDOW'.static.ShowWindow("ShortcutWnd.ShortcutWndVertical_4");
-	class'UIAPI_WINDOW'.static.ShowWindow("ShortcutWnd.ShortcutWndHorizontal_4");
-	HandleExpandButton();
-}
-function Expand5()
-{
-	m_IsShortcutExpand = true;
-	m_IsExpand5 = true;
-	SetOptionBool("Game", "Is5ExpandShortcutWnd", m_IsExpand5);
-	class'UIAPI_WINDOW'.static.ShowWindow("ShortcutWnd.ShortcutWndVertical_5");
-	class'UIAPI_WINDOW'.static.ShowWindow("ShortcutWnd.ShortcutWndHorizontal_5");
-	HandleExpandButton();
 }
 function Reduce()
 {
@@ -946,29 +794,13 @@ function Reduce()
 	SetOptionBool("Game", "Is3ExpandShortcutWnd", m_IsExpand3);
 	class'UIAPI_WINDOW'.static.HideWindow("ShortcutWnd.ShortcutWndVertical_3");
 	class'UIAPI_WINDOW'.static.HideWindow("ShortcutWnd.ShortcutWndHorizontal_3");
-	m_IsExpand4 = false;
-	SetOptionBool("Game", "Is3ExpandShortcutWnd", m_IsExpand4);
-	class'UIAPI_WINDOW'.static.HideWindow("ShortcutWnd.ShortcutWndVertical_4");
-	class'UIAPI_WINDOW'.static.HideWindow("ShortcutWnd.ShortcutWndHorizontal_4");
-	m_IsExpand5 = false;
-	SetOptionBool("Game", "Is3ExpandShortcutWnd", m_IsExpand5);
-	class'UIAPI_WINDOW'.static.HideWindow("ShortcutWnd.ShortcutWndVertical_5");
-	class'UIAPI_WINDOW'.static.HideWindow("ShortcutWnd.ShortcutWndHorizontal_5");
 	HandleExpandButton();
 }
 function OnClickExpandShortcutButton()
 {
-	if (m_IsExpand5)
+	if (m_IsExpand3)
 	{
 		Reduce();
-	}
-	else if (m_IsExpand4)
-	{
-		Expand5();
-	}
-	else if (m_IsExpand3)
-	{
-		Expand4();
 	}
 	else if (m_IsExpand2)
 	{
@@ -1000,14 +832,6 @@ function ExecuteShortcutCommandBySlot(string param)
 		else if(slot >= MAX_ShortcutPerPage*2 && slot < MAX_ShortcutPerPage*3)
 		{
 			class'ShortcutAPI'.static.ExecuteShortcutBySlot(CurrentShortcutPage3*MAX_ShortcutPerPage + slot - MAX_ShortcutPerPage2);
-		}
-		else if(slot >= MAX_ShortcutPerPage*3 && slot < MAX_ShortcutPerPage*4)
-		{
-			class'ShortcutAPI'.static.ExecuteShortcutBySlot(CurrentShortcutPage4*MAX_ShortcutPerPage + slot - MAX_ShortcutPerPage3);
-		}
-		else if(slot >= MAX_ShortcutPerPage*4 && slot < MAX_ShortcutPerPage*5)
-		{
-			class'ShortcutAPI'.static.ExecuteShortcutBySlot(CurrentShortcutPage5*MAX_ShortcutPerPage + slot - MAX_ShortcutPerPage4);
 		}
 	}
 }
